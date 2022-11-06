@@ -48,7 +48,7 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/rsp-microservice-tip-vozil:${{ env.TAG }} 
           build-args:
-            - BUILD_DATE: ${{ steps.current-time.outputs.formattedTime }}
-            - VCS_REF: ${{ github.sha }}
-            - VCS_SRC: "https://github.com/fri-rso2022-group12/microservice-tip-vozil/commit/${{ github.sha }}"
-            - VERSION: ${{ env.TAG }}
+            BUILD_DATE: ${{ steps.current-time.outputs.formattedTime }}
+            VCS_REF: ${{ github.sha }}
+            VCS_SRC: "https://github.com/fri-rso2022-group12/microservice-tip-vozil/commit/${{ github.sha }}"
+            VERSION: ${{ env.TAG }}
