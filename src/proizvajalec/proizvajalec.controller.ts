@@ -1,5 +1,5 @@
-import { Body, Delete, Controller, Get, NotFoundException, Post, Patch, Param, ParseIntPipe } from '@nestjs/common';
-import { ApiBadRequestResponse, ApiForbiddenResponse, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiUnauthorizedResponse, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Delete, Get, NotFoundException, Post, Patch, Param, ParseIntPipe } from '@nestjs/common';
+import { ApiBadRequestResponse, ApiCreatedResponse, ApiForbiddenResponse, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiUnauthorizedResponse, ApiTags } from '@nestjs/swagger';
 
 import { CreateProizvajalecDto, CreateProizvajalecSchema } from './dto/create-proizvajalec.dto';
 import { JoiValidationPipe } from '../common/pipes/joi-validation.pipe';
@@ -40,6 +40,7 @@ export class ProizvajalecController {
 
   @Post()
   @ApiOperation({ description: 'Ustvari novega proizvajalca' })
+  @ApiCreatedResponse()
   async create(
     @Body(new JoiValidationPipe(CreateProizvajalecSchema)) proizvajalec: CreateProizvajalecDto
   ): Promise<void> {
@@ -48,6 +49,7 @@ export class ProizvajalecController {
 
   @Patch(':id')
   @ApiOperation({ description: 'Posodobi obstoječega prizvajalca' })
+  @ApiOkResponse()
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body(new JoiValidationPipe(UpdateProizvajalecSchema)) proizvajalec: UpdateProizvajalecDto
@@ -57,6 +59,7 @@ export class ProizvajalecController {
 
   @Delete(':id')
   @ApiOperation({ description: 'Izbriši proizvajalca' })
+  @ApiOkResponse()
   async delete(
     @Param('id', ParseIntPipe) id: number
   ) {

@@ -1,6 +1,6 @@
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
-import { ModelVozila } from '../model-vozila.entity';
+import { ModelVozila } from '../model-vozila/model-vozila.entity';
 
 @Entity()
 export class Proizvajalec {
