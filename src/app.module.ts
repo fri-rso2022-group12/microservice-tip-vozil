@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CustomConfigModule } from './custom-config/custom-config.module';
 import { DatabaseConfigService } from './custom-config/database-config.service';
+import { ModelVozilaModule } from './model-vozila/model-vozila.module';
 import { ProizvajalecModule } from './proizvajalec/proizvajalec.module';
 
 @Module({
@@ -14,6 +15,7 @@ import { ProizvajalecModule } from './proizvajalec/proizvajalec.module';
       imports: [CustomConfigModule],
       useExisting: DatabaseConfigService,
     }),
+    ModelVozilaModule,
     ProizvajalecModule,
   ],
   controllers: [AppController],
