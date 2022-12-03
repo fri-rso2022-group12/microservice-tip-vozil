@@ -30,7 +30,9 @@ async function bootstrap() {
 
   // Middlewares
   app.use(compression());
-  app.use(helmet());
+  app.use(helmet({
+    contentSecurityPolicy: false,
+  }));
   app.enableCors();
   app.enableShutdownHooks();
 
@@ -43,7 +45,9 @@ async function bootstrap() {
       .addTag('model-vozila', 'Model vozila')
       .addTag('proizvajalec', 'Proizvajalec')
       .build();
-    const document = SwaggerModule.createDocument(app, docConfig);
+    const document = SwaggerModule.createDocument(app, docConfig, {
+      
+    });
     SwaggerModule.setup(docPath, app, document);
   }
 
