@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, NotFoundException, Post, Patch, Param, ParseIntPipe } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiCreatedResponse, ApiForbiddenResponse, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiUnauthorizedResponse, ApiTags } from '@nestjs/swagger';
 
+import { CarDataAPIDto } from './dto/car-data-api.dto';
 import { CreateModelVozilaDto, CreateModelVozilaSchema } from './dto/create-model-vozila.dto';
 import { JoiValidationPipe } from '../common/pipes/joi-validation.pipe';
 import { ModelVozila } from './model-vozila.entity';
@@ -44,6 +45,15 @@ export class ModelVozilaController {
     if (!modelVozila)
       throw new NotFoundException();
     return modelVozila;
+  }
+
+  @Get(':id/izdelave')
+  @ApiOperation({ description: 'Pridobi podatke o izdelavah modela vozila '})
+  @ApiOkResponse()
+  async getIzdelaveById(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<CarDataAPIDto[]> {
+    return await this.modelVozilaService.getIzdelaveById(id);
   }
 
   @Post()

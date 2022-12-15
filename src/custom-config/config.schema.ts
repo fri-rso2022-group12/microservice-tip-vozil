@@ -9,6 +9,8 @@ export const ConfigSchema: Joi.ObjectSchema = Joi.object().keys({
 	CONFIG: Joi.string(),
 	IGNORE_CONFIG: Joi.boolean(),
 
+	HTTP_TIMEOUT: Joi.number().min(0).default(5000),
+
 	/**
 	 * TypeORM
 	 * @see https://typeorm.io/#/using-ormconfig/using-environment-variables
@@ -32,4 +34,11 @@ export const ConfigSchema: Joi.ObjectSchema = Joi.object().keys({
 	CONSUL_HOST: Joi.string().default('localhost'),
 	CONSUL_TOKEN: Joi.string().default(''),
 	CONSUL_CRON: Joi.string().default('*/15 * * * *'),
+
+	/**
+	 * RapidAPI
+	 * @see https://rapidapi.com/principalapis/api/car-data
+	 */
+	RAPIDAPI_HOST: Joi.string().default('car-data.p.rapidapi.com'),
+	RAPIDAPI_KEY: Joi.string().required(),
 });
