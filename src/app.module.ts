@@ -1,4 +1,5 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PrometheusModule } from "@willsoto/nestjs-prometheus";
 import { ConsulModule } from 'nestjs-consul';
@@ -9,6 +10,7 @@ import { ConsulConfigService } from './custom-config/consul-config.service';
 import { CustomConfigModule } from './custom-config/custom-config.module';
 import { DatabaseConfigService } from './custom-config/database-config.service';
 import { HealthModule } from './health/health.module';
+import { HttpLoggingInterceptor } from './http-logging.interceptor';
 import { MaintenanceMiddleware } from './maintenance.middleware';
 import { ModelVozilaModule } from './model-vozila/model-vozila.module';
 import { ProizvajalecModule } from './proizvajalec/proizvajalec.module';
@@ -33,7 +35,13 @@ import { ProizvajalecModule } from './proizvajalec/proizvajalec.module';
     ProizvajalecModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: HttpLoggingInterceptor,
+    },  
+    AppService,
+  ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
