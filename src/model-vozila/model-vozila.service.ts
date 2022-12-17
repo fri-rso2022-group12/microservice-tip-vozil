@@ -36,7 +36,7 @@ export class ModelVozilaService {
     if (!modelVozila)
       return null;
     
-    // TODO: Circuit breaker
+    // Usage of external API
     const data = await firstValueFrom(this.httpService.get(`https://${this.configService.get<string>('RAPIDAPI_HOST')}/cars`, {
       headers: {
         'X-RapidAPI-Key': this.configService.get<string>('RAPIDAPI_KEY'),
