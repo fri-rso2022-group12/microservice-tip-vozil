@@ -1,10 +1,14 @@
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { APP_INTERCEPTOR } from '@nestjs/core';
+import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PrometheusModule } from "@willsoto/nestjs-prometheus";
 import { ConsulModule } from 'nestjs-consul';
+import { join } from 'path';
 
 import { AppController } from './app.controller';
+import { AppResolver } from './app.resolver';
 import { AppService } from './app.service';
 import { ConsulConfigService } from './custom-config/consul-config.service';
 import { CustomConfigModule } from './custom-config/custom-config.module';
@@ -21,6 +25,12 @@ import { ProizvajalecModule } from './proizvajalec/proizvajalec.module';
     TypeOrmModule.forRootAsync({
       imports: [CustomConfigModule],
       useExisting: DatabaseConfigService,
+    }),
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      autoSchemaFile: join(__dirname, 'shema.gql'),
+      installSubscriptionHandlers: true,
+      sortSchema: true,
     }),
     HealthModule,
     PrometheusModule.register(),
@@ -39,8 +49,9 @@ import { ProizvajalecModule } from './proizvajalec/proizvajalec.module';
     {
       provide: APP_INTERCEPTOR,
       useClass: HttpLoggingInterceptor,
-    },  
-    AppService,
+    },
+    AppResolver,
+    AppService, 
   ],
 })
 export class AppModule implements NestModule {

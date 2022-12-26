@@ -14,7 +14,9 @@ export class HttpLoggingInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     if (!this.configService.get<boolean>('LOG_REQUESTS'))
       return next.handle();
-    
+    if (context.getType() !== 'http')
+      return next.handle();
+
     const request: Request = context.switchToHttp().getRequest();
   
     this.logger.verbose(`${request.method} ${request.originalUrl} ENTRY`);

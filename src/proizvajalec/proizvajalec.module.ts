@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { Proizvajalec } from './proizvajalec.entity';
 import { ProizvajalecController } from './proizvajalec.controller';
+import { ProizvajalecResolver } from './proizvajalec.resolver';
 import { ProizvajalecService } from './proizvajalec.service';
 
 @Module({
@@ -12,6 +13,7 @@ import { ProizvajalecService } from './proizvajalec.service';
     ]),
   ],
   providers: [
+    ProizvajalecResolver,
     ProizvajalecService,
   ],
   controllers: [
