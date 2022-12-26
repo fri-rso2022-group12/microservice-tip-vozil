@@ -14,7 +14,7 @@ export class ModelVozila {
   tip: string; // B - bencin, D - diesel, P - plin, E - elektrika
 
   @Column({ type: 'float', nullable: true, unsigned: true })
-  kapaciteta: number;
+  kapaciteta: number | null;
 
   @Column({ nullable: true, unsigned: true })
   stSedezev: number | null;
