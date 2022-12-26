@@ -1,9 +1,11 @@
 import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
+import { Transport } from '@nestjs/microservices';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as compression from 'compression';
 import * as fs from 'fs';
 import helmet from 'helmet';
+import { join } from 'path';
 
 import { AppModule } from './app.module';
 
@@ -28,6 +30,17 @@ async function bootstrap() {
   const enableDocs = configService.get<boolean>('DOCS');
   const port = configService.get<number>('PORT');
 
+  // gRPC
+  const microservice = await app.connectMicroservice({
+    transport: Transport.GRPC,
+    options: {
+      //port: port + 1,
+      url: `localhost:${port + 1}`,
+      package: 'rsomstipvozil',
+      protoPath: join(__dirname, 'app.proto'),
+    }
+  });
+
   // Middlewares
   app.use(compression());
   app.use(helmet({
@@ -50,6 +63,7 @@ async function bootstrap() {
     SwaggerModule.setup(docPath, app, document);
   }
 
+  await app.startAllMicroservices();
   await app.listen(port);
 }
 bootstrap();

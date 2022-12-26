@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package rsomstipvozil;
+
+service ProizvajalecService {
+  rpc getAll (Empty) returns (ProizvajalecResponseArray) {}
+  rpc getById (ProizvajalecId) returns (ProizvajalecResponse) {}
+}
+
+message Proizvajalec {
+  int32 id = 1;
+  string naziv = 2;
+  string dateCreated = 3;
+  string dateUpdated = 4;
+}
+
+message ProizvajalecId {
+  int32 id = 1;
+}
+
+message ProizvajalecResponse {
+  Proizvajalec data = 1;
+}
+
+message ProizvajalecResponseArray {
+  repeated Proizvajalec data = 1;
+}
+
+message Empty {
+
+}

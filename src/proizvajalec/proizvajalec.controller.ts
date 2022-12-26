@@ -1,4 +1,5 @@
 import { Body, Controller, Delete, Get, NotFoundException, Post, Patch, Param, ParseIntPipe } from '@nestjs/common';
+import { GrpcMethod, RpcException } from '@nestjs/microservices';
 import { ApiBadRequestResponse, ApiCreatedResponse, ApiForbiddenResponse, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiUnauthorizedResponse, ApiTags } from '@nestjs/swagger';
 
 import { CreateProizvajalecDto, CreateProizvajalecSchema } from './dto/create-proizvajalec.dto';
@@ -6,6 +7,7 @@ import { JoiValidationPipe } from '../common/pipes/joi-validation.pipe';
 import { Proizvajalec } from './proizvajalec.entity';
 import { ProizvajalecService } from './proizvajalec.service';
 import { UpdateProizvajalecDto, UpdateProizvajalecSchema } from './dto/update-proizvajalec.dto';
+import { Metadata, ServerUnaryCall } from '@grpc/grpc-js';
 
 @ApiTags('proizvajalec')
 @ApiBadRequestResponse({ description: 'Bad request' })
@@ -24,6 +26,11 @@ export class ProizvajalecController {
     return await this.proizvajalecService.getAll();
   }
 
+  @GrpcMethod('ProizvajalecService', 'getAll')
+  async gRPCgetAll(data, metadata: Metadata, call: ServerUnaryCall<any, any>) {
+    return { data: await this.proizvajalecService.getAll() };
+  }
+
   @Get(':id')
   @ApiOperation({ description: 'Pridobi proizvajalca z določenim identifikatorjem' })
   @ApiNotFoundResponse({ description: 'Prozvajalec ne obstaja '})
@@ -36,6 +43,15 @@ export class ProizvajalecController {
       throw new NotFoundException();
 
     return proizvajalec;
+  }
+
+  @GrpcMethod('ProizvajalecService', 'getById')
+  async gRPCgetById(data, metadata: Metadata, call: ServerUnaryCall<any, any>) {
+    const proizvajalec = await this.proizvajalecService.getById(data.id);
+    if (!proizvajalec)
+      throw new RpcException('Not found');
+
+    return { data: await this.proizvajalecService.getById(data.id) };
   }
 
   @Post()
