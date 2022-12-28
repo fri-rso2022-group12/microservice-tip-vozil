@@ -1,6 +1,7 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { ClientKafka } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
 import { firstValueFrom } from 'rxjs';
 import { DeepPartial, Repository } from 'typeorm';
@@ -15,6 +16,8 @@ export class ModelVozilaService {
   constructor(
     private readonly configService: ConfigService,
     private readonly httpService: HttpService,
+    @Inject('KAFKA_BROKER')
+    private readonly kafkaClient: ClientKafka,
     @InjectRepository(ModelVozila)
     private readonly modelVozilaRepository: Repository<ModelVozila>,
   ) {}
@@ -63,5 +66,9 @@ export class ModelVozilaService {
 
   async delete(id: number): Promise<void> {
     await this.modelVozilaRepository.delete(id);
+
+    this.logger.debug('KAFKA: BEFORE');
+    this.kafkaClient.emit('model-vozila.deleted', { id: id });
+    this.logger.debug('KAFKA: AFTER');
   }
 }

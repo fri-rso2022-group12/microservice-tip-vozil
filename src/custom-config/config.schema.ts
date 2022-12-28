@@ -38,6 +38,12 @@ export const ConfigSchema: Joi.ObjectSchema = Joi.object().keys({
 	CONSUL_CRON: Joi.string().default('*/15 * * * *'),
 
 	/**
+	 * Kafka
+	 * @see https://docs.nestjs.com/microservices/kafka
+	 */
+	KAFKA_BROKER: Joi.string().default('localhost:9092'),
+
+	/**
 	 * RapidAPI
 	 * @see https://rapidapi.com/principalapis/api/car-data
 	 */

@@ -5,6 +5,7 @@ import { ConfigSchema } from './config.schema';
 import { ConsulConfigService } from './consul-config.service';
 import { DatabaseConfigService } from './database-config.service';
 import { HttpConfigService } from './http-config.service';
+import { KafkaConfigService } from './kafka-config.service';
 
 @Global()
 @Module({
@@ -29,12 +30,14 @@ import { HttpConfigService } from './http-config.service';
     ConsulConfigService,
     DatabaseConfigService,
     HttpConfigService,
+    KafkaConfigService,
   ],
   exports: [
     ConfigModule,
     ConsulConfigService,
     DatabaseConfigService,
     HttpConfigService,
+    KafkaConfigService,
   ]
 })
 export class CustomConfigModule {}

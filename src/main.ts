@@ -28,16 +28,30 @@ async function bootstrap() {
   // Get configuration
   const docPath = configService.get<string>('DOC_PATH');
   const enableDocs = configService.get<boolean>('DOCS');
+  const kafkaBroker = configService.get<string>('KAFKA_BROKER');
   const port = configService.get<number>('PORT');
 
   // gRPC
-  const microservice = await app.connectMicroservice({
+  const gRPC = await app.connectMicroservice({
     transport: Transport.GRPC,
     options: {
       //port: port + 1,
       url: `localhost:${port + 1}`,
       package: 'rsomstipvozil',
       protoPath: join(__dirname, 'app.proto'),
+    }
+  });
+
+  // Kafka
+  const kafka = await app.connectMicroservice({
+    transport: Transport.KAFKA,
+    options: {
+      client: {
+        brokers: [kafkaBroker],
+      },
+      consumer: {
+        groupId: 'rso-ms-tip-vozil-model-vozila',
+      }
     }
   });
 
