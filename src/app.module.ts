@@ -3,7 +3,7 @@ import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { PrometheusModule } from "@willsoto/nestjs-prometheus";
+import { makeCounterProvider, PrometheusModule } from "@willsoto/nestjs-prometheus";
 import { ConsulModule } from 'nestjs-consul';
 import { join } from 'path';
 
@@ -18,6 +18,7 @@ import { HttpLoggingInterceptor } from './http-logging.interceptor';
 import { MaintenanceMiddleware } from './maintenance.middleware';
 import { ModelVozilaModule } from './model-vozila/model-vozila.module';
 import { ProizvajalecModule } from './proizvajalec/proizvajalec.module';
+import { RequestCounterInterceptor } from './request-counter.interceptor';
 
 @Module({
   imports: [
@@ -46,6 +47,14 @@ import { ProizvajalecModule } from './proizvajalec/proizvajalec.module';
   ],
   controllers: [AppController],
   providers: [
+    makeCounterProvider({
+      name: 'request_served',
+      help: 'request_served_help',
+    }),
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: RequestCounterInterceptor,
+    },
     {
       provide: APP_INTERCEPTOR,
       useClass: HttpLoggingInterceptor,
