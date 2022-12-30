@@ -40,8 +40,7 @@ async function bootstrap() {
   const gRPC = await app.connectMicroservice({
     transport: Transport.GRPC,
     options: {
-      //port: port + 1,
-      url: `localhost:${port + 1}`,
+      url: `0.0.0.0:${port + 1}`,
       package: 'rsomstipvozil',
       protoPath: join(__dirname, 'app.proto'),
     }
